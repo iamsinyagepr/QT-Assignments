@@ -1,0 +1,124 @@
+// Input Mask
+// controls the shape of text entered into an input widget
+
+QLineEdit* phone = new QLineEdit;
+phone->setInputMask("999-999-9999");
+
+/**
+ * MASK CHARACTERS
+ * 
+ * A -> [A-Z,a-z] -> character of the lettercategory required
+ * a -> character of the letter category permitted but not required
+ * 
+ * N -> [A-Z,a-z,0-9] -> Character of the letter or number category required
+ * n -> not required
+ * 
+ * X -> any non-blank character requires
+ * x -> any non-blank character permited but not required.
+ * 
+ * 9 -> [0,9] -> Character of the number category
+ * required
+ * 0 -> Character of the number category permitted not required
+ * 
+ * D -> [1,9] -> Character of the Number category and larger than zero required
+ * d -> permited but not required
+ * 
+ * # -> Character of the number category, or plus/minus sign permitted but not required
+ * 
+ * H -> [A-F, a-g, 0-9] -> Hexidecimal character required
+ * h -> permitted but not required
+ * 
+ * B -> [0-1] -> required
+ * b -> permitted but not required
+ */
+
+ /**
+  *  >      :all following alphabetic characters are uppercased
+  *  <      :all follwing alphabetic characters are lowercase
+  *  !      : Switch of case conversion
+  *  ;c     : Terminates the input mask and sets the black character to c
+  *  [] {}  :Reserved
+  *  \      : Use \ to escape the special characters listed above to use them as seperators
+  */
+
+
+// Validators:
+// - check whether input satiesfies constraints
+
+// Qt provides
+//  restricts input to values consisten with the permitten ineger range
+phone->setValidator(
+    new QIntValidator(18, 65, age)
+);
+
+
+
+
+// QDoubleValidator
+// Only allows decimal numbers within a range and a number of decimal places
+
+QLineEdit *priceEdit = new QLineEdit;
+QDoubleValidator *validator = new QDoubleValidator(0.0, 9999.99, 2, priceEdit);  // 0 to 9999.99, 2 decimals
+validator->setNotation(QDoubleValidator::StandardNotation);  // block scientific notation like 1e5
+validator->setLocale(QLocale::c());                          // always use "." as the decimal separator
+priceEdit->setValidator(validator);
+priceEdit->setPlaceholderText("Price (e.g. 19.99)");
+priceEdit->show();
+
+
+
+
+//QRegularExpressionValidator
+// Allows only text that matches a regular expression
+QLineEdit *codeEdit = new QLineEdit;
+
+// Example pattern: 3 uppercase letters followed by 4 digits (e.g. COS1511)
+QRegularExpression pattern("[A-Z]{3}[0-9]{4}");
+codeEdit->setValidator(new QRegularExpressionValidator(pattern, codeEdit));
+
+
+// use to check if input is valid
+ageEdit->hasAcceptableInput()
+
+
+
+
+
+// Regular Expressions
+// describes a pattern of characters
+
+/**
+ * 
+ *  ^       :Begining of string
+ *  $       :End of string
+ *  .       :Any character except newline by default
+ *  *       :Zero or more
+ *  +       :One or more
+ *  ?       :Zero or more
+ *  {n}     :Exactly n repetitions
+ *  {n,m}   :Between n and m
+ *  [abc]   :Character class
+ *  \d      :Digit
+ *  \w      :Word character
+ *  \s      :Whitespace
+ *  \|      :Alternation
+ */
+
+
+// Qt Regular expression validation on input
+QRegularExpression regex(
+    R"(^[A-Za-z]{3,20}$)"
+);
+
+auto* validator =  new QRegularExpressionValidator(regex, nameInput);
+nameInput->setValidator(validator);
+
+
+
+// Direct validation example
+QRegularExpression regex(
+    R"(^\d{4}$)"
+);
+
+QString input = "1234";
+bool valid = regex.match(input).hasMatch();
